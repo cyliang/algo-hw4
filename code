@@ -2,11 +2,32 @@
 
 import msgpack
 
+def distinct_pat(string, length, numAlpha):
+	hashTable = [0] * (numAlpha ** length)
+	distinctCount = 0
+	
+	trTable = {}
+	newString = [None] * len(string)
+	for i, c in enumerate(string):
+		newString[i] = trTable.setdefault(c, len(trTable))
+
+	for i in range(length - 1, len(newString)):
+		perm = sum([newString[i - subi] * (numAlpha ** subi) for subi in range(length)])
+		if hashTable[perm] == 0:
+			distinctCount += 1
+			hashTable[perm] = 1
+
+
+
 
 with open("input.txt", "rb") as input_file, open("output.txt", "wb") as output_file:
 	inPack = msgpack.Unpacker(input_file, use_list = True)
 
-	seq_count = inPack.unpack()
-	for i in range(seq_count):
-		seq = inPack.unpack()
-		msgpack.pack(seq, output_file)
+	N = inPack.unpack()
+	for i in range(N):
+		subLength = inPack.unpack()
+		diffChar = inPack.unpack()
+		string = inPack.unpack()
+
+		msgpack.pack(distinct_pat(string, subLength, diffChar), output_file)
+		

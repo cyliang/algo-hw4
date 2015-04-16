@@ -1,0 +1,4 @@
+test/*
+*.swp
+input.txt
+output.txt
