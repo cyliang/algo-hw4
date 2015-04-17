@@ -6,16 +6,24 @@ def distinct_pat(string, length, numAlpha):
 	hashTable = [0] * (numAlpha ** length)
 	distinctCount = 0
 	
-	trTable = {}
+	trTable = [None] * 256
+	trNo = 0
 	newString = [None] * len(string)
 	for i, c in enumerate(string):
-		newString[i] = trTable.setdefault(c, len(trTable))
+		c_ascii = ord(c)
+		if trTable[c_ascii] is None:
+			trTable[c_ascii] = trNo
+			trNo += 1
+
+		newString[i] = trTable[c_ascii]
 
 	for i in range(length - 1, len(newString)):
 		perm = sum([newString[i - subi] * (numAlpha ** subi) for subi in range(length)])
 		if hashTable[perm] == 0:
 			distinctCount += 1
 			hashTable[perm] = 1
+
+	return distinctCount
 
 
 
