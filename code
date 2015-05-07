@@ -17,8 +17,12 @@ def distinct_pat(string, length, numAlpha):
 
 		newString[i] = trTable[c_ascii]
 
+	leftmost = 0
+	leftpow = numAlpha ** (length - 1)
+	perm = sum([newString[length - 2 - subi] * (numAlpha ** subi) for subi in range(length - 1)])
 	for i in range(length - 1, len(newString)):
-		perm = sum([newString[i - subi] * (numAlpha ** subi) for subi in range(length)])
+		perm = (perm - leftmost) * numAlpha + newString[i]
+		leftmost = newString[i - length + 1] * leftpow
 		if hashTable[perm] == 0:
 			distinctCount += 1
 			hashTable[perm] = 1
